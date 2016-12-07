@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>充值</title>
+    <link rel="stylesheet" type="text/css" href="../style/recharge.css"/>
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="http://cdn.bootcss.com/touchjs/0.2.14/touch.js"></script>
+    <script type="text/javascript">
+    	
+   		document.addEventListener('plusready', function(){
+   			//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+   			
+   		});
+   		
+    </script>
+</head>
+<body>
+<!--用户ID-->
+	<header>
+		<div class="recharge_head">
+			<img class="recharge_headeImg" src="../images/kongjian@2x.png"/>
+			<p class="recharge_headId">开心撒旦打算是事实上事实上事实我我我</p>
+		</div>
+		
+		<div class="lanjingMoney">
+			<p><span class="moneyValue">0</span> 蓝鲸币</p>
+		</div>
+	</header>
+	<!--充值页面-->
+	<main>
+		<p class="main_top">
+			请选择购买蓝鲸币数量（10蓝鲸币=1元）
+		</p>   
+		<!--充值额度-->
+		<ul class="main_center">
+			<li class="recharge_amount"><span>60</span>蓝鲸币(6)元</li>
+			<li class="recharge_amount"><span>300</span>蓝鲸币(300)元</li>
+			<li class="recharge_amount"><span>680</span>蓝鲸币(68)元</li>
+			<!--含赠送-->
+			<li class="recharge_amount rechargeGive"><span>980</span>蓝鲸币(98)元</br><p class="recharge_give">赠送99蓝鲸币</p></li>
+			<li class="recharge_amount rechargeGive"><span>1280</span>蓝鲸币(128)元</br><p class="recharge_give">赠送199蓝鲸币</p></li>
+			<li class="recharge_amount rechargeGive"><span>5880</span>蓝鲸币(588)元</br><p class="recharge_give">赠送999蓝鲸币</p></li>
+			<li class="recharge_amount rechargeGive"><span>9980</span>蓝鲸币(998)元</br><p class="recharge_give">赠送1999蓝鲸币</p></li>
+			<li class="recharge_amount rechargeGive"><span>15980</span>蓝鲸币(1598)元</br><p class="recharge_give">赠送2999蓝鲸币</p></li>
+		</ul>
+		<button class="main_bottom" id="buttons" type="submit">
+			充 值
+		</button>
+	</main>
+</body>
+	<script type="text/javascript">
+		$(function(){
+			document.documentElement.style.fontSize = innerWidth / 7.5 + "px";
+			window.onresize = function(){
+				document.documentElement.style.fontSize = innerWidth / 7.5 + "px";
+			}
+		})
+	</script>
+	<script src="../js/recharge.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			
+			var ID = 60;
+			sessionStorage.setItem("id",ID);
+			//点击变化选中的充值面额
+			$(".recharge_amount").each(function(i){
+				(function(j){
+					$(".main_center").find("li").eq(j).on("click",function(){
+//					console.log(j)
+					$(".recharge_amount").css({
+						"background":"url(../images/huikuang1.png)",
+						"backgroundSize":"100%",
+						"color":"rgb(51,51,51)"
+					});
+					$(this).css({
+						"color":" #ff7700",
+						"background": "url(../images/frame.png)",
+						"backgroundSize":"100%"
+					})
+				//存储点击的id值
+				
+				ID = $(this).find("span").text();
+					sessionStorage.setItem("id",ID);
+				})
+				})(i)			
+			})
+			$("#buttons").on("click",function(){
+				var ID = sessionStorage.getItem("id");
+				console.log(ID)
+			})
+			
+			$.ajax({
+				type:"get",
+				url:"",
+				async:true
+			});
+			
+			  console.log(ID)
+			  window.onerror = function(err) {
+                log('window.onerror: ' + err)
+            }
+		//这段代码是固定的，必须放到js中
+            function setupWebViewJavascriptBridge(callback) {
+                if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+                if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+                window.WVJBCallbacks = [callback];
+                var WVJBIframe = document.createElement('iframe');
+                WVJBIframe.style.display = 'none';
+                WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+                document.documentElement.appendChild(WVJBIframe);
+                setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+            }
+            
+            
+		//与OC交互的所有js方法都要放在此处注册，才能调用通过js调用oc或者让oc调用这里的js
+            setupWebViewJavascriptBridge(function(bridge) {
+                var uniqueId = 1
+                function log(message, data) {
+                    var log = document.getElementById('log')
+                    var el = document.createElement('div')
+                    el.className = 'logLine'
+                    el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+                    if (log.children.length) { log.insertBefore(el, log.children[0]) }
+                    else { log.appendChild(el) }
+                }
+// Initialize your app here 初始化你的应用程序在这里
+
+//我们在这注册一个js调用oc的方法，不带参数，且不用objc端反馈结果给JS：打开本demo对应的博文
+                bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
+                    log('ObjC called testJavascriptHandler with', data)
+                
+                var responseData = { 'Javascript Says':'Right back atcha!' }
+                    log('JS responding with', responseData)
+                    responseCallback(responseData)
+                })
+	
+                document.body.appendChild(document.createElement('br'))
+                var callbackButton = document.getElementById('buttons')
+                callbackButton.onclick = function(e) {
+                    e.preventDefault()
+					var ID = sessionStorage.getItem("id");
+			//通过bridge.callHandler来调用 IOS代码
+                    bridge.callHandler('testObjcCallback1', {'flag': 'ok',"id":ID}, function(response) {
+                        document.getElementsByClassName('moneyValue').innerHTML = response
+                    })
+                }
+            })
+		})
+	</script>
+</html>
